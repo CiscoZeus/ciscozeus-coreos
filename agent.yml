@@ -6,7 +6,18 @@ metadata:
 spec:
   containers:
     - name: ciscozeus-logforwarder
-      image: kumulus/td-agent
+      image: kumulustech/td-agent-cz
+      env:
+        - name: user
+          value: NOUSER
+        - name: token
+          value: NOTOKEN
+        - name: shared_key
+          value: cisco_zeus_log_metric_pipline
+        - name: self_hostname
+          value: fluentd-client1.ciscozeus.io
+        - name: data_server
+          value: data01.ciscozeus.io
       volumeMounts:
         - mountPath: /var/run/docker.sock
           name: dockersock

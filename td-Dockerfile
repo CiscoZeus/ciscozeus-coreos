@@ -10,12 +10,13 @@ RUN rpm --import https://packages.treasuredata.com/GPG-KEY-td-agent
 ADD td-agent.repo /etc/yum.repos.d/td-agent.repo
 RUN yum -y update && yum -y install gem ruby-devel make gcc gcc-c++ net-tools td-agent libcurl-devel && yum clean all
 RUN td-agent-gem install \
+    fluent-plugin-cadvisor \
     fluent-plugin-kubernetes \
     fluent-plugin-record-reformer \
     fluent-plugin-secure-forward \
     fluent-plugin-kubernetes_metadata_filter \
     fluent-plugin-systemd
 
-ADD td-agent.conf /etc/td-agent/td-agent.conf
+ADD run.sh run.sh
 
-ENTRYPOINT ["td-agent"]
+ENTRYPOINT ["run.sh"]

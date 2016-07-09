@@ -1,3 +1,26 @@
+#!/bin/bash
+
+# arguments:
+# user: ciscozeus user name
+# token: ciscozeus data token
+# Without these, the container will not be able to post data.
+#
+# optionally, you can also pass a new shared key:
+# shared_key:
+#
+# And a new data source name:
+# self_hostname:
+#
+# And a data server:
+# data_server:
+
+user=${user:-none}
+token=${token:-none}
+shared_key=${shared_key:-cisco_zeus_log_metric_pipline}
+self_hostname=${self_hostname:-fluentd-client1.ciscozeus.io}
+data_server=${data_server:-data01.ciscozeus.io}
+
+cat > /etc/td-agent/td-agent.conf <<EOF
 <match fluent.**>
   type null
 </match>
@@ -15,8 +38,8 @@
 
 <match docker.var.lib.docker.containers.*.*.log>
   type kubernetes
-  container_id ${tag_parts[5]}
-  tag docker.${name}
+  container_id \${tag_parts[5]}
+  tag docker.\${name}
 </match>
 
 <source>
@@ -64,19 +87,22 @@
 
 <match systemd.** cadvisor.** kubernetes.**>
   type record_reformer
-  tag logs.${tag}.<USERNAME>-<TOKEN>
+  tag logs.\${tag}.${user}-${token}
   <record>
-    @timestamp ${time}
+    @timestamp \${time}
   </record>
 </match>
 
 <match logs.**>
   type secure_forward
-  shared_key cisco_zeus_log_metric_pipline
-  self_hostname fluentd-client1.ciscozeus.io
+  shared_key ${shared_key}
+  self_hostname ${self_hostname}
   secure false
   keepalive 10
   <server>
-     host data01.ciscozeus.io
+     host ${data_server}
   </server>
 </match>
+EOF
+
+td-agent

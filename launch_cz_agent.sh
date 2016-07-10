@@ -9,3 +9,5 @@ fi
 master=`kubectl cluster-info | awk '/master/ {print $6}'  | cut -d / -f 3`
 
 sed -i '' -e "s/NOUSER/${1}/" -e "s/NOTOKEN/${2}/" -e "s/MASTER/${master}/" agent.yml
+
+kubectl create -f agent.yml

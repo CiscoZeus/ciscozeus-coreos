@@ -6,7 +6,7 @@ metadata:
 spec:
   containers:
     - name: ciscozeus-logforwarder
-      image: kumulustech/td-agent-cz
+      image: kumulustech/td-agent-cz:1.0
       env:
         - name: user
           value: NOUSER

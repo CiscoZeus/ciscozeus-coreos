@@ -17,6 +17,6 @@ RUN td-agent-gem install \
     fluent-plugin-kubernetes_metadata_filter \
     fluent-plugin-systemd
 
-ADD run.sh run.sh
+ADD ./run.sh /run.sh
 
-ENTRYPOINT ["run.sh"]
+ENTRYPOINT ["/run.sh"]

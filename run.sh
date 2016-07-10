@@ -19,6 +19,7 @@ token=${token:-none}
 shared_key=${shared_key:-cisco_zeus_log_metric_pipline}
 self_hostname=${self_hostname:-fluentd-client1.ciscozeus.io}
 data_server=${data_server:-data01.ciscozeus.io}
+master=${masger:-127.0.0.1}
 
 cat > /etc/td-agent/td-agent.conf <<EOF
 <match fluent.**>
@@ -80,6 +81,7 @@ cat > /etc/td-agent/td-agent.conf <<EOF
 
 <source>
   type cadvisor
+  host ${master}
   port 4194
   stats_interval 30
   tag_prefix cadvisor.
@@ -105,4 +107,4 @@ cat > /etc/td-agent/td-agent.conf <<EOF
 </match>
 EOF
 
-td-agent
+exec td-agent $@

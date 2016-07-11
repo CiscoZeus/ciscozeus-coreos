@@ -20,7 +20,7 @@ shared_key=${shared_key:-cisco_zeus_log_metric_pipline}
 self_hostname=${self_hostname:-fluentd-client1.ciscozeus.io}
 data_server=${data_server:-data01.ciscozeus.io}
 master=${master:-127.0.0.1}
-
+api_version=${api_version:-1.3}
 cat > /etc/td-agent/td-agent.conf <<EOF
 <match fluent.**>
   type null
@@ -83,8 +83,9 @@ cat > /etc/td-agent/td-agent.conf <<EOF
   type cadvisor
   host ${master}
   port 4194
-  docker_url unix:///varrun/docker.sock
+  docker_url unix:///var/run/docker.sock
   stats_interval 30
+  api_version ${api_version}
   tag_prefix cadvisor.
 </source>
 
